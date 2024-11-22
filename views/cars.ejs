@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Create Car</title>
+    <style>
+        input {
+            margin: 10px;
+        }
+
+        button {
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Tạo một xe hơi mới</h2>
+    <a href="/cars">Danh sách xe hơi</a> <br>
+    <a href="/">Trang chủ</a>
+    <form id="carForm">
+        <input type="text" id="tenXe" placeholder="Tên xe" /><br>
+        <input type="text" id="hangSanXuat" placeholder="Hãng sản xuất" /><br>
+        <input type="number" id="namSanXuat" placeholder="Năm sản xuất" /><br>
+        <input type="number" id="giaBan" placeholder="Giá bán" /><br>
+        <input type="text" id="moTa" placeholder="Mô tả" /><br>
+        <button type="submit">Create Car</button>
+    </form>
+    <script>
+        document.getElementById("carForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const tenXe = document.getElementById("tenXe").value.trim();
+            const hangSanXuat = document.getElementById("hangSanXuat").value.trim();
+            const namSanXuat = document.getElementById("namSanXuat").value.trim();
+            const giaBan = document.getElementById("giaBan").value.trim();
+            const moTa = document.getElementById("moTa").value.trim();
+
+
+            if (!tenXe || !hangSanXuat || !namSanXuat || !giaBan || !moTa) {
+                alert("Vui lòng điền đầy đủ thông tin!");
+                return;
+            }
+
+            // Kiểm tra trường Name - phải là chữ cái
+            if (!/^[a-zA-Z\s]+$/.test(tenXe)) {
+                alert("Tên xe phải chỉ chứa chữ cái!");
+                return;
+            }
+
+            // Kiểm tra trường Price - phải là số
+            if (isNaN(giaBan) || giaBan <= 0) {
+                alert("Giá phải là số dương!");
+                return;
+            }
+
+            // Kiểm tra trường Year
+            if (isNaN(namSanXuat)) {
+                alert("Năm phải là số!");
+                return;
+            }
+
+
+            // Nếu tất cả các điều kiện đều đạt, gửi dữ liệu
+            submitCarData({
+                tenXe: tenXe,
+                hangSanXuat: hangSanXuat,
+                namSanXuat: namSanXuat,
+                giaBan: giaBan,
+                moTa: moTa
+            });
+        });
+
+        async function submitCarData(carData) {
+            const response = await fetch("/cars/create", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(carData)
+            });
+
+            if (response.ok) {
+                alert("Tạo xe hơi thành công!");
+                window.location.href = "/cars";
+            } else {
+                alert("Có lỗi xảy ra!");
+            }
+        }
+
+    </script>
+</body>
+
+</html>
