@@ -3,7 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Create Car</title>
+    <title>Manage Cars</title>
+    <!-- Thêm link Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
         input {
             margin: 10px;
@@ -16,80 +19,60 @@
 </head>
 
 <body>
-    <h2>Tạo một xe hơi mới</h2>
-    <a href="/cars">Danh sách xe hơi</a> <br>
-    <a href="/">Trang chủ</a>
-    <form id="carForm">
-        <input type="text" id="tenXe" placeholder="Tên xe" /><br>
-        <input type="text" id="hangSanXuat" placeholder="Hãng sản xuất" /><br>
-        <input type="number" id="namSanXuat" placeholder="Năm sản xuất" /><br>
-        <input type="number" id="giaBan" placeholder="Giá bán" /><br>
-        <input type="text" id="moTa" placeholder="Mô tả" /><br>
-        <button type="submit">Create Car</button>
-    </form>
-    <script>
-        document.getElementById("carForm").addEventListener("submit", function (event) {
-            event.preventDefault();
+    <div class="container">
+        <br>
+        <br>
+        <h1>Danh sách xe hơi</h1>
+        <a href="/cars/form" class="btn btn-primary">Tạo xe mới</a>
+        <br><br>
 
-            const tenXe = document.getElementById("tenXe").value.trim();
-            const hangSanXuat = document.getElementById("hangSanXuat").value.trim();
-            const namSanXuat = document.getElementById("namSanXuat").value.trim();
-            const giaBan = document.getElementById("giaBan").value.trim();
-            const moTa = document.getElementById("moTa").value.trim();
+        <!-- Bảng hiển thị danh sách xe -->
+        <table class="table table-bordered table table-hover">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Tên xe</th>
+                    <th>Hãng sản xuất</th>
+                    <th>Năm sản xuất</th>
+                    <th>Giá bán</th>
+                    <th>Mô tả</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% cars.forEach(function(car, index) { %>
+                    <tr>
+                        <th scope="row">
+                            <%= index+1 %>
+                        </th>
+                        <td>
+                            <%= car.tenXe %>
+                        </td>
+                        <td>
+                            <%= car.hangSanXuat %>
+                        </td>
+                        <td>
+                            <%= car.namSanXuat %>
+                        </td>
+                        <td>
+                            <%= car.giaBan %> $
+                        </td>
+                        <td>
+                            <%= car.moTa %>
+                        </td>
+                        <td>
+                            <a href="/cars/edit/<%= car._id %>" class="btn btn-warning btn-sm">Sửa</a>
+                            <a href="/cars/delete/<%= car._id %>" class="btn btn-danger btn-sm"
+                                onclick="return confirm('Bạn chắc chắn muốn xóa xe này?')">Xóa</a>
+                        </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+    </div>
 
-
-            if (!tenXe || !hangSanXuat || !namSanXuat || !giaBan || !moTa) {
-                alert("Vui lòng điền đầy đủ thông tin!");
-                return;
-            }
-
-            // Kiểm tra trường Name - phải là chữ cái
-            if (!/^[a-zA-Z\s]+$/.test(tenXe)) {
-                alert("Tên xe phải chỉ chứa chữ cái!");
-                return;
-            }
-
-            // Kiểm tra trường Price - phải là số
-            if (isNaN(giaBan) || giaBan <= 0) {
-                alert("Giá phải là số dương!");
-                return;
-            }
-
-            // Kiểm tra trường Year
-            if (isNaN(namSanXuat)) {
-                alert("Năm phải là số!");
-                return;
-            }
-
-
-            // Nếu tất cả các điều kiện đều đạt, gửi dữ liệu
-            submitCarData({
-                tenXe: tenXe,
-                hangSanXuat: hangSanXuat,
-                namSanXuat: namSanXuat,
-                giaBan: giaBan,
-                moTa: moTa
-            });
-        });
-
-        async function submitCarData(carData) {
-            const response = await fetch("/cars/create", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(carData)
-            });
-
-            if (response.ok) {
-                alert("Tạo xe hơi thành công!");
-                window.location.href = "/cars";
-            } else {
-                alert("Có lỗi xảy ra!");
-            }
-        }
-
-    </script>
+    <!-- Thêm script bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
