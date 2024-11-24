@@ -58,12 +58,6 @@
                 return;
             }
 
-            // Kiểm tra trường Name - phải là chữ cái
-            if (!/^[a-zA-Z\s]+$/.test(tenXe)) {
-                alert("Tên xe phải chỉ chứa chữ cái!");
-                return;
-            }
-
             // Kiểm tra trường Price - phải là số
             if (isNaN(giaBan) || giaBan <= 0) {
                 alert("Giá phải là số dương!");
@@ -73,6 +67,11 @@
             // Kiểm tra trường Year
             if (isNaN(namSanXuat)) {
                 alert("Năm phải là số!");
+                return;
+            }
+
+            if (namSanXuat < 1900 || namSanXuat > new Date().getFullYear()) {
+                alert("Năm sản xuất không hợp lệ!");
                 return;
             }
 
